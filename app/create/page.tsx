@@ -8,17 +8,20 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, Wallet, Calendar, MapPin, Zap, Image as ImageIcon, Ticket } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useStacksWallet } from '@/lib/useStacksWallet';
 import type { CreateEventInput } from '@/lib/types';
 import Image from 'next/image';
 // Imports removed (dynamic imports used instead)
+
+const ConnectButton = dynamic(() => import('@/components/ConnectButton'), { ssr: false });
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'ST1B27X06M4SF2TE46G3VBA7KSR4KBMJCTK862QET';
 const CONTRACT_NAME = process.env.NEXT_PUBLIC_CONTRACT_NAME || 'party-stacker-contract';
 
 export default function CreatePage() {
   const router = useRouter();
-  const { address, connect, isConnected, error: walletError, loading: walletLoading } = useStacksWallet();
+  const { address, isConnected, error: walletError, loading: walletLoading } = useStacksWallet();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [step, setStep] = useState<'connect' | 'form'>(isConnected ? 'form' : 'connect');
@@ -40,16 +43,6 @@ export default function CreatePage() {
       backstage: { price: 500, available: 20 },
     },
   });
-
-  const handleConnectWallet = async () => {
-    setError('');
-    try {
-      await connect();
-      setStep('form');
-    } catch (err: any) {
-      setError(err.message || 'Failed to connect wallet');
-    }
-  };
 
   const handleInputChange = (field: keyof CreateEventInput, value: any) => {
     setFormData((prev) => ({
@@ -198,9 +191,6 @@ export default function CreatePage() {
         <div className="relative z-10 w-full max-w-md">
           <div className="space-y-8">
             <div className="text-center space-y-4">
-              <Link href="/" className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-lg shadow-orange-500/30 mb-4 transition-transform hover:scale-105">
-                <Wallet className="w-8 h-8 text-white" />
-              </Link>
               <h1 className="text-4xl font-bold text-white tracking-tight">Create Event</h1>
               <p className="text-slate-400">
                 Launch your blockchain-powered event on Stacks
@@ -226,15 +216,14 @@ export default function CreatePage() {
                   </div>
                 )}
 
-                <Button
-                  onClick={handleConnectWallet}
-                  disabled={walletLoading}
+                {/* Connect Button Component */}
+                <ConnectButton
+                  onConnect={() => setStep('form')}
                   size="lg"
                   className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium h-12 shadow-lg shadow-orange-500/20"
                 >
-                  <Wallet className="w-5 h-5 mr-2" />
-                  {walletLoading ? 'Connecting...' : 'Connect Wallet'}
-                </Button>
+                  Connect Wallet
+                </ConnectButton>
 
                 <p className="text-xs text-slate-500 text-center">
                   Need Leather Wallet? <a href="https://leather.io" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:underline">Install here</a>
