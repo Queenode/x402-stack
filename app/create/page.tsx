@@ -11,9 +11,7 @@ import { ArrowLeft, Wallet, Calendar, MapPin, Zap, Image as ImageIcon, Ticket } 
 import { useStacksWallet } from '@/lib/useStacksWallet';
 import type { CreateEventInput } from '@/lib/types';
 import Image from 'next/image';
-import { openContractCall } from '@stacks/connect';
-import { uintCV, stringAsciiCV } from '@stacks/transactions';
-import { StacksTestnet } from '@stacks/network';
+// Imports removed (dynamic imports used instead)
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'ST1B27X06M4SF2TE46G3VBA7KSR4KBMJCTK862QET';
 const CONTRACT_NAME = process.env.NEXT_PUBLIC_CONTRACT_NAME || 'party-stacker-contract';
@@ -106,6 +104,11 @@ export default function CreatePage() {
 
       // 2. Trigger Blockchain Transaction
       const metadataUri = data.event.metadataUri || `ipfs://simulated-${data.event.id}`;
+
+      // Dynamically import Stacks libraries to avoid SSR build errors
+      const { openContractCall } = await import('@stacks/connect');
+      const { StacksTestnet } = await import('@stacks/network');
+      const { uintCV, stringAsciiCV } = await import('@stacks/transactions');
 
       await openContractCall({
         network: new StacksTestnet(),

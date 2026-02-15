@@ -2,6 +2,10 @@
 
 A production-ready decentralized event ticketing platform built on the Stacks blockchain with automatic NFT attendance proofs.
 
+## 🎭 Hackathon Demo
+
+For a step-by-step guide on how to present this project to judges, see [DEMO_FLOW.md](./DEMO_FLOW.md). It covers the **Organizer**, **Fan (x402 Buy)**, and **Gatekeeper (Verify)** flows.
+
 ## Features
 
 - **Zero Fees**: Direct peer-to-peer payments via Stacks blockchain

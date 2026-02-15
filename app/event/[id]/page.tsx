@@ -13,9 +13,7 @@ import { useStacksWallet } from '@/lib/useStacksWallet';
 import { formatSTX, getExplorerURL, X402_HEADERS, encodePaymentHeader } from '@/lib/x402-client';
 import type { Event, Ticket, TicketTier } from '@/lib/types';
 import Link from 'next/link';
-import { openContractCall } from '@stacks/connect';
-import { uintCV, PostConditionMode, Pc } from '@stacks/transactions';
-import { StacksTestnet } from '@stacks/network';
+// Imports removed (dynamic imports used instead)
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'ST1B27X06M4SF2TE46G3VBA7KSR4KBMJCTK862QET';
 const CONTRACT_NAME = process.env.NEXT_PUBLIC_CONTRACT_NAME || 'party-stacker-contract';
@@ -108,7 +106,7 @@ export default function EventPage() {
   };
 
   const handleConfirmPayment = async () => {
-    if (!pendingTier || !address || !paymentInfo) return;
+    if (!pendingTier || !address || !paymentInfo || !event) return;
 
     setPurchasing(true);
     setError('');
@@ -141,6 +139,11 @@ export default function EventPage() {
       const tierKey = pendingTier as keyof typeof event.tiers;
       const priceSTX = event.tiers[tierKey].price;
       const priceMicroSTX = Math.floor(priceSTX * 1_000_000);
+
+      // Dynamically import Stacks libraries to avoid SSR build errors
+      const { openContractCall } = await import('@stacks/connect');
+      const { StacksTestnet } = await import('@stacks/network');
+      const { uintCV, Pc } = await import('@stacks/transactions');
 
       const postCondition = Pc.principal(address)
         .willSendEq(priceMicroSTX)
