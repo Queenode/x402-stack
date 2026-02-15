@@ -1,257 +1,205 @@
-# PartyStacker - Blockchain Event Ticketing Platform
+# 🎉 PartyStacker — Decentralized Event Ticketing Powered by x402 + Stacks
 
-A production-ready decentralized event ticketing platform built on the Stacks blockchain with automatic NFT attendance proofs.
+> **The event industry is broken.** Scalpers, counterfeit tickets, hidden fees, and zero transparency. PartyStacker fixes all of it — with a single protocol.
 
-## 🎭 Hackathon Demo
+---
 
-For a step-by-step guide on how to present this project to judges, see [DEMO_FLOW.md](./DEMO_FLOW.md). It covers the **Organizer**, **Fan (x402 Buy)**, and **Gatekeeper (Verify)** flows.
+## 🧠 The Vision
 
-## Features
+**PartyStacker reimagines event ticketing as a native internet payment flow.**
 
-- **Zero Fees**: Direct peer-to-peer payments via Stacks blockchain
-- **Verified Tickets**: Cryptographic QR codes impossible to forge
-- **NFT Rewards**: Attendees receive NFTs as proof of attendance
-- **Tier Upgrades**: Pay-per-tier pricing with seamless upgrades
-- **Beautiful UI**: Modern, responsive design inspired by StacksAI
+Today, buying a concert ticket means trusting a centralized middleman who charges 20–30% fees, controls your data, and can revoke your ticket at will. Artists get paid weeks later. Fans get gouged by scalpers. Organizers have no transparency into secondary markets.
 
-## Tech Stack
+**What if buying a ticket was as simple as loading a webpage?**
 
-- **Framework**: Next.js 14+ with App Router
-- **Wallet**: Leather Wallet integration (Stacks)
-- **State Management**: Zustand
-- **UI Components**: shadcn/ui
-- **Styling**: Tailwind CSS
-- **Blockchain**: Stacks (@stacks/transactions)
+The [x402 protocol](https://www.x402.org/) introduces `HTTP 402 Payment Required` — the forgotten HTTP status code — as a native web payment standard. When a fan wants a ticket, the server responds with `402` and payment requirements. The fan's wallet pays directly. The organizer receives funds instantly. No middleman. No fees. No trust required.
 
-## Getting Started
+**PartyStacker is the first event ticketing platform built entirely on this vision:**
 
-### Prerequisites
+```
+Fan visits event page → Server returns 402 → Leather Wallet pays in STX → NFT ticket minted on-chain → QR code generated → Done.
+```
 
-1. **Leather Wallet Extension** - Install from [leather.io](https://leather.io)
-2. **Node.js 18+** - For development
+Every ticket is an on-chain asset. Every payment is peer-to-peer. Every check-in is cryptographically verified. This isn't just better ticketing — it's a new primitive for how the internet handles paid access.
 
-### Installation
+---
+
+## 🏗️ What We Built
+
+### Smart Contract (`Party-stacker-contract2`)
+A Clarity smart contract deployed on Stacks Testnet that handles:
+- **Multi-tier event creation** (General / VIP / Backstage) with independent pricing & capacity
+- **On-chain ticket purchases** with STX post-conditions ensuring exact payment
+- **NFT minting** for attendance proof (SIP-009 compatible)
+- **Organizer revenue tracking** with transparent fund distribution
+
+### x402 Payment Flow
+The ticket purchase implements the full x402-stacks V2 protocol:
+1. **402 Response** — Server responds with payment requirements (asset, amount, network, payTo address)
+2. **Wallet Payment** — Fan reviews & signs transaction via Leather Wallet
+3. **Payment Proof** — Client sends `X-PAYMENT` header with encoded transaction proof
+4. **Ticket Issuance** — Server verifies payment, issues ticket + QR code
+
+### Full-Stack Application
+| Feature | Description |
+|---|---|
+| 🎫 **Create Events** | Multi-tier pricing, IPFS metadata, on-chain registration |
+| 💳 **Buy Tickets** | x402 payment flow with Leather Wallet + STX |
+| 📱 **QR Tickets** | Cryptographic QR codes with event + tier + owner data |
+| ✅ **Verify & Check-in** | Camera-based QR scanning for event gatekeepers |
+| 📊 **Analytics Dashboard** | Real-time sales, revenue, and check-in metrics |
+| 🖼️ **NFT Attendance** | Auto-mint NFTs as proof-of-attendance on check-in |
+
+---
+
+## 🚀 Live Demo
+
+**🌐 [https://x402-stack.vercel.app](https://x402-stack.vercel.app)**
+
+### Quick Demo Flow
+
+**As an Organizer:**
+1. Connect Leather Wallet → Create Event → Set tiers & pricing → Sign transaction
+
+**As a Fan:**
+1. Browse events → Select tier → Server returns 402 → Pay with STX → Receive QR ticket
+
+**As a Gatekeeper:**
+1. Go to `/verify` → Scan attendee's QR → Confirm check-in → NFT minted
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | Next.js 16, React 19, Tailwind CSS, shadcn/ui |
+| **Blockchain** | Stacks (Bitcoin L2), Clarity smart contracts |
+| **Wallet** | Leather Wallet (@stacks/connect v8) |
+| **Protocol** | x402-stacks V2 (HTTP 402 Payment Required) |
+| **Storage** | IPFS via Pinata (event metadata) |
+| **State** | Zustand (client), JSON DB (server) |
+| **Deployment** | Vercel (frontend), Stacks Testnet (contracts) |
+
+---
+
+## 📁 Project Structure
+
+```
+contracts/
+└── party-stacker.clar         # Clarity smart contract (multi-tier ticketing + NFT)
+
+app/
+├── page.tsx                    # Landing page with hero slider & event showcase
+├── events/page.tsx             # Full events listing with search
+├── create/page.tsx             # Multi-step event creation wizard
+├── event/[id]/page.tsx         # Event detail + x402 ticket purchase
+├── my-tickets/page.tsx         # User's tickets with QR codes
+├── verify/page.tsx             # QR scanner for check-in
+├── dashboard/page.tsx          # Organizer analytics
+└── api/                        # x402-compliant API routes
+    ├── events/                 # Event CRUD + on-chain fetching
+    ├── tickets/purchase/       # x402 payment flow (402 → verify → issue)
+    ├── tickets/checkin/        # Check-in + NFT mint trigger
+    └── analytics/              # Real-time event metrics
+
+lib/
+├── stacks-api.ts              # On-chain read functions (get-event, get-all-tiers)
+├── useStacksWallet.ts         # Leather Wallet hook (@stacks/connect v8)
+├── x402-client.ts             # x402 payment encoding/headers
+├── qr-utils.ts                # Cryptographic QR generation & verification
+├── store.ts                   # Zustand wallet state
+└── types.ts                   # TypeScript interfaces
+
+components/
+├── Navbar.tsx                 # Global navigation with wallet connect
+├── HeroSlider.tsx             # Animated hero section
+├── TierSelector.tsx           # Ticket tier selection cards
+├── QRCodeDisplay.tsx          # Ticket QR code with event details
+└── EventCard.tsx              # Event preview card
+```
+
+---
+
+## 🔮 Roadmap & Future Vision
+
+### Phase 1 — Foundation ✅ (Current)
+- [x] Clarity smart contract with multi-tier ticketing
+- [x] x402 payment flow for ticket purchases
+- [x] Leather Wallet integration
+- [x] QR-based check-in with NFT attendance proof
+- [x] IPFS metadata storage via Pinata
+- [x] Analytics dashboard for organizers
+
+### Phase 2 — Scale
+- [ ] **Mainnet deployment** — Move from Testnet to Stacks Mainnet
+- [ ] **Database migration** — PostgreSQL/Supabase for production data persistence
+- [ ] **Secondary marketplace** — On-chain ticket resales with organizer royalties (anti-scalping)
+- [ ] **Dynamic pricing** — Algorithmic pricing based on demand curves
+
+### Phase 3 — Protocol
+- [ ] **Multi-chain support** — Extend x402 to Ethereum, Solana, and other L2s
+- [ ] **Subscription tickets** — Season passes as recurring x402 payments
+- [ ] **DAO governance** — Event organizer DAOs for community-governed festivals
+- [ ] **Soulbound tickets** — Non-transferable tickets for exclusive events
+
+### Phase 4 — Ecosystem
+- [ ] **Widget SDK** — Embeddable ticket purchase widget for any website
+- [ ] **Mobile app** — Native iOS/Android with NFC ticket scanning
+- [ ] **Artist revenue splits** — On-chain royalty distribution to performers
+- [ ] **Cross-event loyalty** — NFT-gated rewards across the PartyStacker network
+
+---
+
+## 🧪 Smart Contract
+
+**Deployed on Stacks Testnet:**
+- **Address:** `ST1B27X06M4SF2TE46G3VBA7KSR4KBMJCTK862QET`
+- **Contract:** `Party-stacker-contract2`
+
+### Key Functions
+
+| Function | Description |
+|---|---|
+| `create-event` | Register event with 3 tiers (price + capacity each) |
+| `buy-ticket` | Purchase ticket for a specific event + tier |
+| `get-event` | Read event metadata from chain |
+| `get-all-tiers` | Read all tier stats (price, capacity, sold) |
+| `get-last-event-id` | Get total event count |
+
+---
+
+## 🏃 Getting Started
 
 ```bash
+# Clone the repository
+git clone https://github.com/Queenode/x402-stack.git
+cd x402-stack
+
 # Install dependencies
-npm install
+pnpm install
+
+# Set up environment
+cp .env.example .env.local
+# Add your Pinata API keys
 
 # Start development server
-npm run dev
+pnpm run dev
 ```
 
-The application will be available at `http://localhost:3000`
+**Prerequisites:**
+- Node.js 18+
+- [Leather Wallet](https://leather.io) browser extension
+- Stacks Testnet STX ([faucet](https://explorer.hiro.so/sandbox/faucet?chain=testnet))
 
-## Project Structure
+---
 
-```
-app/
-├── page.tsx                 # Homepage with events showcase
-├── create/page.tsx         # Create new events
-├── event/[id]/page.tsx     # Event detail & ticket purchase
-├── my-tickets/page.tsx     # User's tickets with QR codes
-├── verify/page.tsx         # QR code verification for check-in
-├── dashboard/page.tsx      # Organizer analytics dashboard
-├── api/                    # Backend API routes
-├── layout.tsx              # Root layout
-└── globals.css             # Global styles & theme
-lib/
-├── types.ts               # TypeScript interfaces
-├── store.ts               # Zustand store for wallet state
-├── db.ts                  # In-memory database layer
-├── web3-context.tsx       # Leather Wallet integration
-├── qr-utils.ts            # QR code generation/verification
-├── stacks-nft.ts          # NFT minting utilities
-└── x402-client.ts         # Payment client
-components/
-├── TierSelector.tsx       # Ticket tier selection
-├── QRCodeDisplay.tsx      # Ticket QR code display
-└── EventCard.tsx          # Event preview card
-```
+## 👥 Team
 
-## Key Pages
+Built by **Queenode** for the x402 Hackathon.
 
-### Homepage (`/`)
-- Browse upcoming events
-- View event details and pricing
-- Feature showcase
+---
 
-### Create Event (`/create`)
-- **Step 1**: Connect Leather Wallet
-- **Step 2**: Set event details (title, location, date)
-- **Step 3**: Configure ticket tiers (General, VIP, Backstage)
-- **Step 4**: Create event on blockchain
+## 📄 License
 
-### Event Detail (`/event/[id]`)
-- View event full details
-- Select and purchase ticket tier
-- Receive QR code ticket
-- Option to upgrade tier
-
-### My Tickets (`/my-tickets`)
-- View all purchased tickets
-- Download/share QR codes
-- Track check-in status
-
-### Verify QR (`/verify`)
-- Scan attendee QR codes at check-in
-- Mint attendance NFTs
-- Confirm check-in with confetti celebration
-
-### Dashboard (`/dashboard`)
-- Real-time event analytics
-- Sales by tier breakdown
-- Check-in statistics
-
-## Wallet Integration
-
-### Leather Wallet Connection
-
-The app uses Leather Wallet for Stacks blockchain integration:
-
-1. User clicks "Create Event" → "Connect Wallet"
-2. Leather Wallet popup prompts for account selection
-3. User's address is stored in Zustand store
-4. User can now create events and purchase tickets
-
-**Key Files**:
-- `lib/web3-context.tsx` - Leather Wallet integration
-- Uses `stx_requestAccounts` method for Stacks
-
-## API Routes
-
-### Events
-- `GET /api/events` - List all events
-- `POST /api/events` - Create new event
-- `GET /api/events/[id]` - Get event details
-
-### Tickets
-- `POST /api/tickets/purchase` - Purchase ticket
-- `POST /api/tickets/checkin` - Check-in & mint NFT
-- `GET /api/tickets` - Get user's tickets
-
-### Analytics
-- `GET /api/analytics/[eventId]` - Event analytics
-
-## Data Models
-
-### Event
-```typescript
-{
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  date: number; // Unix timestamp
-  organizerAddress: string;
-  organizerName: string;
-  tiers: {
-    general: { price: number; available: number; sold: number };
-    vip: { price: number; available: number; sold: number };
-    backstage: { price: number; available: number; sold: number };
-  };
-  imageUrl: string;
-  nftImageUrl: string;
-  status: 'upcoming' | 'live' | 'ended';
-}
-```
-
-### Ticket
-```typescript
-{
-  id: string;
-  eventId: string;
-  ownerAddress: string;
-  tier: 'general' | 'vip' | 'backstage';
-  qrCodeData: string; // Base64 encoded QR
-  checkedIn: boolean;
-  nftMinted: boolean;
-  nftTokenId?: string;
-  createdAt: number;
-}
-```
-
-## Styling & Theme
-
-The application uses a modern dark theme with:
-- **Primary Color**: Golden Yellow (#ffd700)
-- **Secondary Color**: Bright Blue (#00d4ff)
-- **Accent Color**: Purple/Pink (#ff1493)
-- **Background**: Deep slate (0% 0% 3%)
-
-All colors are defined in `app/globals.css` using CSS custom properties for easy customization.
-
-## Error Handling
-
-The application includes proper error handling for:
-- Wallet connection failures
-- Event creation errors
-- Payment processing issues
-- QR code verification failures
-
-All errors are logged with `console.error('[v0] ...')` for debugging.
-
-## Development
-
-### Running Tests
-```bash
-npm test
-```
-
-### Building for Production
-```bash
-npm run build
-npm start
-```
-
-### Environment Variables
-
-No environment variables required for local development. The app uses:
-- In-memory database (no external DB needed)
-- Leather Wallet (browser extension)
-- Stacks blockchain (public)
-
-## Fixed Issues
-
-### Hydration Mismatch (✓ Fixed)
-- Removed global Web3Provider from root layout
-- Each page that needs wallet context now wraps itself with Web3Provider
-- Prevents browser extension attribute conflicts
-
-### Leather Wallet Integration (✓ Fixed)
-- Uses `stx_requestAccounts` instead of Ethereum methods
-- Proper error handling for missing wallet extension
-- Type definitions for LeatherProvider
-
-### Private Key Security (✓ Fixed)
-- No longer asks users for private keys
-- Uses Leather Wallet browser extension for signing
-- Secure, user-controlled key management
-
-## Deployment
-
-The application can be deployed to:
-- **Vercel** (recommended)
-- **Netlify**
-- **Any Node.js hosting**
-
-```bash
-# Deploy to Vercel
-npm install -g vercel
-vercel
-```
-
-## Contributing
-
-This is a complete, production-ready implementation. Contributions welcome!
-
-## License
-
-MIT License - See LICENSE file for details
-
-## Support
-
-For issues or questions:
-1. Check the debug logs in browser console (look for `[v0]` prefixed messages)
-2. Verify Leather Wallet is installed and connected
-3. Ensure you're on the correct Stacks network
+MIT License — See [LICENSE](./LICENSE) for details.
