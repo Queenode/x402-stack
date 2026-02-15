@@ -13,9 +13,6 @@ import { useStacksWallet } from '@/lib/useStacksWallet';
 import { formatSTX, getExplorerURL, X402_HEADERS, encodePaymentHeader } from '@/lib/x402-client';
 import type { Event, Ticket, TicketTier } from '@/lib/types';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
-
-const ConnectButton = dynamic(() => import('@/components/ConnectButton'), { ssr: false });
 // Imports removed (dynamic imports used instead)
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'ST1B27X06M4SF2TE46G3VBA7KSR4KBMJCTK862QET';
@@ -414,11 +411,9 @@ export default function EventPage() {
                   <p className="text-slate-600 dark:text-slate-400 text-sm">
                     Connect your Leather Wallet to buy tickets with STX via x402 protocol
                   </p>
-                  <ConnectButton
-                    className="bg-orange-500 hover:bg-orange-600 text-white font-medium"
-                  >
-                    Connect Leather Wallet
-                  </ConnectButton>
+                  <Button onClick={connect} disabled={walletLoading} className="bg-orange-500 hover:bg-orange-600 text-white font-medium">
+                    {walletLoading ? 'Connecting...' : 'Connect Leather Wallet'}
+                  </Button>
                 </Card>
               ) : (
                 <div className="space-y-4">

@@ -5,12 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Ticket, BarChart3, QrCode, Wallet, Calendar } from 'lucide-react';
 import { useStacksWallet } from '@/lib/useStacksWallet';
 
-import dynamic from 'next/dynamic';
-
-const ConnectButton = dynamic(() => import('@/components/ConnectButton'), { ssr: false });
-
 export function Navbar() {
-    const { address, isConnected, disconnect } = useStacksWallet();
+    const { address, isConnected, connect, disconnect, loading: walletLoading } = useStacksWallet();
 
     return (
         <nav className="fixed w-full top-0 z-50 border-b border-white/5 bg-slate-950/80 backdrop-blur-xl transition-all">
@@ -68,10 +64,15 @@ export function Navbar() {
                             </Button>
                         </div>
                     ) : (
-                        <ConnectButton
+                        <Button
                             size="sm"
+                            onClick={connect}
+                            disabled={walletLoading}
                             className="bg-orange-500 hover:bg-orange-600 text-white font-medium"
-                        />
+                        >
+                            <Wallet className="w-4 h-4 mr-1" />
+                            {walletLoading ? 'Connecting...' : 'Connect Wallet'}
+                        </Button>
                     )}
 
                     <Link href="/create">
