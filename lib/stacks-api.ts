@@ -3,8 +3,8 @@ import { StacksTestnet } from '@stacks/network';
 import type { Event } from './types';
 
 const NETWORK = new StacksTestnet({ url: 'https://api.testnet.hiro.so' });
-const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!;
-const CONTRACT_NAME = process.env.NEXT_PUBLIC_CONTRACT_NAME!;
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'ST1B27X06M4SF2TE46G3VBA7KSR4KBMJCTK862QET';
+const CONTRACT_NAME = process.env.NEXT_PUBLIC_CONTRACT_NAME || 'Party-stacker-contract2';
 
 // Helper to fetch single event
 export async function fetchEventFromChain(id: number): Promise<Event | null> {

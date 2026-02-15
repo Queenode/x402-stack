@@ -60,5 +60,36 @@
     "createdAt": 1771080656134,
     "status": "upcoming",
     "metadataUri": "ipfs://QmPkQU9HLgXT3mrKTxtjsWBZautit7MRu2Mj1itxXmnSoD"
+  },
+  {
+    "id": "evt-1771166303336-y2l81vp13",
+    "title": "Stacks Talent builder reward",
+    "description": "Let's celebrate builders on stack network, we appreciate your consistency and dedication, come all let's celebrate you.",
+    "imageUrl": "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14",
+    "location": "Cairo",
+    "date": 1772026620000,
+    "organizerAddress": "ST1B27X06M4SF2TE46G3VBA7KSR4KBMJCTK862QET",
+    "organizerName": "Stacks Talent builder reward",
+    "tiers": {
+      "general": {
+        "price": 1,
+        "available": 500,
+        "sold": 0
+      },
+      "vip": {
+        "price": 2,
+        "available": 100,
+        "sold": 0
+      },
+      "backstage": {
+        "price": 4,
+        "available": 20,
+        "sold": 0
+      }
+    },
+    "nftImageUrl": "https://images.unsplash.com/photo-1622737133809-d95047b9e673",
+    "createdAt": 1771166303336,
+    "status": "upcoming",
+    "metadataUri": "ipfs://QmQpoN8KyNQho2gz9BQfxXU3oNcvQpzzL3usgfQxnZeEdj"
   }
 ]

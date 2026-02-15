@@ -16,7 +16,7 @@ import Link from 'next/link';
 // Imports removed (dynamic imports used instead)
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || 'ST1B27X06M4SF2TE46G3VBA7KSR4KBMJCTK862QET';
-const CONTRACT_NAME = process.env.NEXT_PUBLIC_CONTRACT_NAME || 'party-stacker-contract';
+const CONTRACT_NAME = process.env.NEXT_PUBLIC_CONTRACT_NAME || 'Party-stacker-contract2';
 
 export default function EventPage() {
   const params = useParams();
