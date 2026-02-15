@@ -1,38 +1,8 @@
 [
   {
-    "id": "evt-genesis-001",
-    "title": "Genesis Launch Party",
-    "description": "The first official party on the Stacks blockchain! Come join us for music, drinks, and networking with the best builders in the ecosystem.",
-    "imageUrl": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30",
-    "location": "Miami, FL",
-    "date": 1771684051001,
-    "organizerAddress": "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
-    "organizerName": "Satoshi Nakamoto",
-    "tiers": {
-      "general": {
-        "price": 10,
-        "available": 100,
-        "sold": 5
-      },
-      "vip": {
-        "price": 50,
-        "available": 20,
-        "sold": 2
-      },
-      "backstage": {
-        "price": 100,
-        "available": 5,
-        "sold": 0
-      }
-    },
-    "nftImageUrl": "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e",
-    "createdAt": 1771079251001,
-    "status": "upcoming"
-  },
-  {
     "id": "evt-1771079433572-5gznfrsaz",
     "title": "Stacks Builder Hackathon",
-    "description": "The hackathon is public and global, focused on catalyzing creative, impactful use cases around x402-stacks. Whether you’re a seasoned blockchain developer, a Web3 enthusiast, or passionate about reimagining digital monetization, this event is your gateway to contributing to the evolution of open payments.",
+    "description": "The hackathon is public and global, focused on catalyzing creative, impactful use cases around x402-stacks. Whether you're a seasoned blockchain developer, a Web3 enthusiast, or passionate about reimagining digital monetization, this event is your gateway to contributing to the evolution of open payments.",
     "imageUrl": "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14",
     "location": "Abuja, Nigeria.",
     "date": 1772285280000,
